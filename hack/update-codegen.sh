@@ -28,7 +28,7 @@ CODEGEN_PKG=$GOPATH/src/k8s.io/code-generator
 cd "${CODEGEN_PKG}"
 bash ./generate-groups.sh "all" \
   github.com/STRRL/sample-controller-rabbit/pkg/generated github.com/STRRL/sample-controller-rabbit/pkg/apis \
-  rabbit:v1beta1 \
+  rabbit:v1alpha1 \
   --output-base "$(dirname "${BASH_SOURCE[0]}")/../../.." \
   --go-header-file "${SCRIPT_ROOT}"/hack/boilerplate.go.txt
 
