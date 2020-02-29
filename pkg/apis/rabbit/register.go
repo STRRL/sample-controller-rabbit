@@ -2,5 +2,5 @@ package rabbit
 
 const (
 	GroupName = "rabbit.strrl.com"
-	Version="v1alpha1"
+	Version   = "v1beta1"
 )

@@ -1,10 +1,11 @@
-package v1alpha1
+package v1beta1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // +genclient
+// +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type Rabbit struct {
@@ -15,8 +16,8 @@ type Rabbit struct {
 }
 
 type RabbitSpec struct {
-	name string
-	age  uint
+	Name string `json:"name"`
+	Age  int    `json:"age"`
 }
 
 type RabbitList struct {
@@ -25,4 +26,3 @@ type RabbitList struct {
 
 	Items []Rabbit `json:"items"`
 }
-

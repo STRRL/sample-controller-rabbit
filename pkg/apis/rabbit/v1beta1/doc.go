@@ -1,3 +1,3 @@
 // +k8s:deepcopy-gen=package
 // +groupName=rabbit.strrl.com
-package v1alpha1
+package v1beta1
