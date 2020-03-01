@@ -18,16 +18,15 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+SCRIPT_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 CODEGEN_PKG=${GOPATH}/src/k8s.io/code-generator
 ROOT_PACKAGE="github.com/STRRL/sample-controller-rabbit"
-
 # generate the code with:
 # --output-base    because this script should also be able to run inside the vendor dir of
 #                  k8s.io/kubernetes. The output-base is needed for the generators to output into the vendor dir
 #                  instead of the $GOPATH directly. For normal projects this can be dropped.
-cd "${CODEGEN_PKG}"
-bash ./generate-groups.sh "all" \
+bash "${CODEGEN_PKG}"/generate-groups.sh "deepcopy,client,informer,lister" \
   ${ROOT_PACKAGE}/pkg/generated ${ROOT_PACKAGE}/pkg/apis \
-  rabbit:v1beta1 -v 5
+  rabbit:v1alpha1
 # To use your own boilerplate text append:
 #   --go-header-file "${SCRIPT_ROOT}"/hack/custom-boilerplate.go.txt

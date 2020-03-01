@@ -1,4 +1,4 @@
-package v1beta1
+package v1alpha1
 
 import (
 	"github.com/STRRL/sample-controller-rabbit/pkg/apis/rabbit"
