@@ -1,3 +1,4 @@
+---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -7,5 +8,37 @@ spec:
   version: v1alpha1
   names:
     kind: Rabbit
-    plural: Rabbits
+    listKind: RabbitList
+    singular: rabbit
+    plural: rabbits
+    shortNames:
+      - rbt
+  scope: Namespaced
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: rabbit-worlds.strrl.com
+spec:
+  group: strrl.com
+  version: v1alpha1
+  names:
+    kind: RabbitWorld
+    listKind: RabbitWorldList
+    singular: rabbit-world
+    plural: rabbit-worlds
+  scope: Namespaced
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: rabbit-holes.strrl.com
+spec:
+  group: strrl.com
+  version: v1alpha1
+  names:
+    kind: RabbitHole
+    listKind: RabbitHoleList
+    singular: rabbit-hole
+    plural: rabbit-holes
   scope: Namespaced

@@ -26,3 +26,23 @@ type RabbitList struct {
 
 	Items []Rabbit `json:"items"`
 }
+
+type RabbitWorld struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Spec RabbitWorldSpec `json:"spec"`
+}
+
+type RabbitWorldSpec struct {
+	Name   string `json:"name"`
+	MaxNum int    `json:"max_num"`
+	MaxAge int    `json:"max_age"`
+}
+
+type RabbitWorldList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata"`
+
+	Items []RabbitWorld `json:"items"`
+}
