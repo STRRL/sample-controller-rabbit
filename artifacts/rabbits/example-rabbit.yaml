@@ -1,0 +1,8 @@
+apiVersion: strrl.com/v1alpha1
+kind: Rabbit
+metadata:
+  name: example-rabiit
+spec:
+  nickName: example-rabiit
+  birthday: 1
+  generation: 2

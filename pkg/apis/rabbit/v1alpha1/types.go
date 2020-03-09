@@ -5,20 +5,27 @@ import (
 )
 
 // +genclient
-// +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type Rabbit struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec RabbitSpec `json:"spec"`
+	Spec   RabbitSpec   `json:"spec"`
+	Status RabbitStatus `json:"status"`
 }
 
 type RabbitSpec struct {
-	Name string `json:"name"`
-	Age  int    `json:"age"`
+	NickName   string `json:"nick_name"`
+	Birthday   int64  `json:"birthday"`
+	Generation uint   `json:"generation"`
 }
+
+type RabbitStatus struct {
+	Age int `json:"age"`
+}
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type RabbitList struct {
 	metav1.TypeMeta `json:",inline"`
@@ -26,6 +33,8 @@ type RabbitList struct {
 
 	Items []Rabbit `json:"items"`
 }
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type RabbitWorld struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -39,6 +48,8 @@ type RabbitWorldSpec struct {
 	MaxNum int    `json:"max_num"`
 	MaxAge int    `json:"max_age"`
 }
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type RabbitWorldList struct {
 	metav1.TypeMeta `json:",inline"`

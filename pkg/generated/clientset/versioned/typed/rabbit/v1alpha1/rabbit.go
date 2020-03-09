@@ -19,7 +19,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
 	"time"
 
 	v1alpha1 "github.com/STRRL/sample-controller-rabbit/pkg/apis/rabbit/v1alpha1"
@@ -38,14 +37,15 @@ type RabbitsGetter interface {
 
 // RabbitInterface has methods to work with Rabbit resources.
 type RabbitInterface interface {
-	Create(ctx context.Context, rabbit *v1alpha1.Rabbit, opts v1.CreateOptions) (*v1alpha1.Rabbit, error)
-	Update(ctx context.Context, rabbit *v1alpha1.Rabbit, opts v1.UpdateOptions) (*v1alpha1.Rabbit, error)
-	Delete(ctx context.Context, name string, opts *v1.DeleteOptions) error
-	DeleteCollection(ctx context.Context, opts *v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.Rabbit, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.RabbitList, error)
-	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Rabbit, err error)
+	Create(*v1alpha1.Rabbit) (*v1alpha1.Rabbit, error)
+	Update(*v1alpha1.Rabbit) (*v1alpha1.Rabbit, error)
+	UpdateStatus(*v1alpha1.Rabbit) (*v1alpha1.Rabbit, error)
+	Delete(name string, options *v1.DeleteOptions) error
+	DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error
+	Get(name string, options v1.GetOptions) (*v1alpha1.Rabbit, error)
+	List(opts v1.ListOptions) (*v1alpha1.RabbitList, error)
+	Watch(opts v1.ListOptions) (watch.Interface, error)
+	Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.Rabbit, err error)
 	RabbitExpansion
 }
 
@@ -56,7 +56,7 @@ type rabbits struct {
 }
 
 // newRabbits returns a Rabbits
-func newRabbits(c *RabbitV1alpha1Client, namespace string) *rabbits {
+func newRabbits(c *StrrlV1alpha1Client, namespace string) *rabbits {
 	return &rabbits{
 		client: c.RESTClient(),
 		ns:     namespace,
@@ -64,20 +64,20 @@ func newRabbits(c *RabbitV1alpha1Client, namespace string) *rabbits {
 }
 
 // Get takes name of the rabbit, and returns the corresponding rabbit object, and an error if there is any.
-func (c *rabbits) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Rabbit, err error) {
+func (c *rabbits) Get(name string, options v1.GetOptions) (result *v1alpha1.Rabbit, err error) {
 	result = &v1alpha1.Rabbit{}
 	err = c.client.Get().
 		Namespace(c.ns).
 		Resource("rabbits").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // List takes label and field selectors, and returns the list of Rabbits that match those selectors.
-func (c *rabbits) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.RabbitList, err error) {
+func (c *rabbits) List(opts v1.ListOptions) (result *v1alpha1.RabbitList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -88,13 +88,13 @@ func (c *rabbits) List(ctx context.Context, opts v1.ListOptions) (result *v1alph
 		Resource("rabbits").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // Watch returns a watch.Interface that watches the requested rabbits.
-func (c *rabbits) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+func (c *rabbits) Watch(opts v1.ListOptions) (watch.Interface, error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -105,49 +105,63 @@ func (c *rabbits) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interfa
 		Resource("rabbits").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Watch(ctx)
+		Watch()
 }
 
 // Create takes the representation of a rabbit and creates it.  Returns the server's representation of the rabbit, and an error, if there is any.
-func (c *rabbits) Create(ctx context.Context, rabbit *v1alpha1.Rabbit, opts v1.CreateOptions) (result *v1alpha1.Rabbit, err error) {
+func (c *rabbits) Create(rabbit *v1alpha1.Rabbit) (result *v1alpha1.Rabbit, err error) {
 	result = &v1alpha1.Rabbit{}
 	err = c.client.Post().
 		Namespace(c.ns).
 		Resource("rabbits").
-		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(rabbit).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // Update takes the representation of a rabbit and updates it. Returns the server's representation of the rabbit, and an error, if there is any.
-func (c *rabbits) Update(ctx context.Context, rabbit *v1alpha1.Rabbit, opts v1.UpdateOptions) (result *v1alpha1.Rabbit, err error) {
+func (c *rabbits) Update(rabbit *v1alpha1.Rabbit) (result *v1alpha1.Rabbit, err error) {
 	result = &v1alpha1.Rabbit{}
 	err = c.client.Put().
 		Namespace(c.ns).
 		Resource("rabbits").
 		Name(rabbit.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(rabbit).
-		Do(ctx).
+		Do().
+		Into(result)
+	return
+}
+
+// UpdateStatus was generated because the type contains a Status member.
+// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+
+func (c *rabbits) UpdateStatus(rabbit *v1alpha1.Rabbit) (result *v1alpha1.Rabbit, err error) {
+	result = &v1alpha1.Rabbit{}
+	err = c.client.Put().
+		Namespace(c.ns).
+		Resource("rabbits").
+		Name(rabbit.Name).
+		SubResource("status").
+		Body(rabbit).
+		Do().
 		Into(result)
 	return
 }
 
 // Delete takes name of the rabbit and deletes it. Returns an error if one occurs.
-func (c *rabbits) Delete(ctx context.Context, name string, options *v1.DeleteOptions) error {
+func (c *rabbits) Delete(name string, options *v1.DeleteOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
 		Resource("rabbits").
 		Name(name).
 		Body(options).
-		Do(ctx).
+		Do().
 		Error()
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *rabbits) DeleteCollection(ctx context.Context, options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+func (c *rabbits) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
 	var timeout time.Duration
 	if listOptions.TimeoutSeconds != nil {
 		timeout = time.Duration(*listOptions.TimeoutSeconds) * time.Second
@@ -158,21 +172,20 @@ func (c *rabbits) DeleteCollection(ctx context.Context, options *v1.DeleteOption
 		VersionedParams(&listOptions, scheme.ParameterCodec).
 		Timeout(timeout).
 		Body(options).
-		Do(ctx).
+		Do().
 		Error()
 }
 
 // Patch applies the patch and returns the patched rabbit.
-func (c *rabbits) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Rabbit, err error) {
+func (c *rabbits) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.Rabbit, err error) {
 	result = &v1alpha1.Rabbit{}
 	err = c.client.Patch(pt).
 		Namespace(c.ns).
 		Resource("rabbits").
-		Name(name).
 		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
+		Name(name).
 		Body(data).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }

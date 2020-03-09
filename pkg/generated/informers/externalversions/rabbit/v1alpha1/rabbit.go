@@ -19,7 +19,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
 	time "time"
 
 	rabbitv1alpha1 "github.com/STRRL/sample-controller-rabbit/pkg/apis/rabbit/v1alpha1"
@@ -62,13 +61,13 @@ func NewFilteredRabbitInformer(client versioned.Interface, namespace string, res
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.RabbitV1alpha1().Rabbits(namespace).List(context.TODO(), options)
+				return client.StrrlV1alpha1().Rabbits(namespace).List(options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.RabbitV1alpha1().Rabbits(namespace).Watch(context.TODO(), options)
+				return client.StrrlV1alpha1().Rabbits(namespace).Watch(options)
 			},
 		},
 		&rabbitv1alpha1.Rabbit{},

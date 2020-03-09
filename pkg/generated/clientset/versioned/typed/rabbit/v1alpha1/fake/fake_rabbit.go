@@ -19,8 +19,6 @@ limitations under the License.
 package fake
 
 import (
-	"context"
-
 	v1alpha1 "github.com/STRRL/sample-controller-rabbit/pkg/apis/rabbit/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
@@ -32,16 +30,16 @@ import (
 
 // FakeRabbits implements RabbitInterface
 type FakeRabbits struct {
-	Fake *FakeRabbitV1alpha1
+	Fake *FakeStrrlV1alpha1
 	ns   string
 }
 
-var rabbitsResource = schema.GroupVersionResource{Group: "rabbit.strrl.com", Version: "v1alpha1", Resource: "rabbits"}
+var rabbitsResource = schema.GroupVersionResource{Group: "strrl.com", Version: "v1alpha1", Resource: "rabbits"}
 
-var rabbitsKind = schema.GroupVersionKind{Group: "rabbit.strrl.com", Version: "v1alpha1", Kind: "Rabbit"}
+var rabbitsKind = schema.GroupVersionKind{Group: "strrl.com", Version: "v1alpha1", Kind: "Rabbit"}
 
 // Get takes name of the rabbit, and returns the corresponding rabbit object, and an error if there is any.
-func (c *FakeRabbits) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Rabbit, err error) {
+func (c *FakeRabbits) Get(name string, options v1.GetOptions) (result *v1alpha1.Rabbit, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewGetAction(rabbitsResource, c.ns, name), &v1alpha1.Rabbit{})
 
@@ -52,7 +50,7 @@ func (c *FakeRabbits) Get(ctx context.Context, name string, options v1.GetOption
 }
 
 // List takes label and field selectors, and returns the list of Rabbits that match those selectors.
-func (c *FakeRabbits) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.RabbitList, err error) {
+func (c *FakeRabbits) List(opts v1.ListOptions) (result *v1alpha1.RabbitList, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewListAction(rabbitsResource, rabbitsKind, c.ns, opts), &v1alpha1.RabbitList{})
 
@@ -74,14 +72,14 @@ func (c *FakeRabbits) List(ctx context.Context, opts v1.ListOptions) (result *v1
 }
 
 // Watch returns a watch.Interface that watches the requested rabbits.
-func (c *FakeRabbits) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+func (c *FakeRabbits) Watch(opts v1.ListOptions) (watch.Interface, error) {
 	return c.Fake.
 		InvokesWatch(testing.NewWatchAction(rabbitsResource, c.ns, opts))
 
 }
 
 // Create takes the representation of a rabbit and creates it.  Returns the server's representation of the rabbit, and an error, if there is any.
-func (c *FakeRabbits) Create(ctx context.Context, rabbit *v1alpha1.Rabbit, opts v1.CreateOptions) (result *v1alpha1.Rabbit, err error) {
+func (c *FakeRabbits) Create(rabbit *v1alpha1.Rabbit) (result *v1alpha1.Rabbit, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewCreateAction(rabbitsResource, c.ns, rabbit), &v1alpha1.Rabbit{})
 
@@ -92,7 +90,7 @@ func (c *FakeRabbits) Create(ctx context.Context, rabbit *v1alpha1.Rabbit, opts 
 }
 
 // Update takes the representation of a rabbit and updates it. Returns the server's representation of the rabbit, and an error, if there is any.
-func (c *FakeRabbits) Update(ctx context.Context, rabbit *v1alpha1.Rabbit, opts v1.UpdateOptions) (result *v1alpha1.Rabbit, err error) {
+func (c *FakeRabbits) Update(rabbit *v1alpha1.Rabbit) (result *v1alpha1.Rabbit, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateAction(rabbitsResource, c.ns, rabbit), &v1alpha1.Rabbit{})
 
@@ -102,8 +100,20 @@ func (c *FakeRabbits) Update(ctx context.Context, rabbit *v1alpha1.Rabbit, opts 
 	return obj.(*v1alpha1.Rabbit), err
 }
 
+// UpdateStatus was generated because the type contains a Status member.
+// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+func (c *FakeRabbits) UpdateStatus(rabbit *v1alpha1.Rabbit) (*v1alpha1.Rabbit, error) {
+	obj, err := c.Fake.
+		Invokes(testing.NewUpdateSubresourceAction(rabbitsResource, "status", c.ns, rabbit), &v1alpha1.Rabbit{})
+
+	if obj == nil {
+		return nil, err
+	}
+	return obj.(*v1alpha1.Rabbit), err
+}
+
 // Delete takes name of the rabbit and deletes it. Returns an error if one occurs.
-func (c *FakeRabbits) Delete(ctx context.Context, name string, options *v1.DeleteOptions) error {
+func (c *FakeRabbits) Delete(name string, options *v1.DeleteOptions) error {
 	_, err := c.Fake.
 		Invokes(testing.NewDeleteAction(rabbitsResource, c.ns, name), &v1alpha1.Rabbit{})
 
@@ -111,7 +121,7 @@ func (c *FakeRabbits) Delete(ctx context.Context, name string, options *v1.Delet
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *FakeRabbits) DeleteCollection(ctx context.Context, options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+func (c *FakeRabbits) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
 	action := testing.NewDeleteCollectionAction(rabbitsResource, c.ns, listOptions)
 
 	_, err := c.Fake.Invokes(action, &v1alpha1.RabbitList{})
@@ -119,7 +129,7 @@ func (c *FakeRabbits) DeleteCollection(ctx context.Context, options *v1.DeleteOp
 }
 
 // Patch applies the patch and returns the patched rabbit.
-func (c *FakeRabbits) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Rabbit, err error) {
+func (c *FakeRabbits) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.Rabbit, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(rabbitsResource, c.ns, name, pt, data, subresources...), &v1alpha1.Rabbit{})
 

@@ -20,8 +20,8 @@ package fake
 
 import (
 	clientset "github.com/STRRL/sample-controller-rabbit/pkg/generated/clientset/versioned"
-	rabbitv1alpha1 "github.com/STRRL/sample-controller-rabbit/pkg/generated/clientset/versioned/typed/rabbit/v1alpha1"
-	fakerabbitv1alpha1 "github.com/STRRL/sample-controller-rabbit/pkg/generated/clientset/versioned/typed/rabbit/v1alpha1/fake"
+	strrlv1alpha1 "github.com/STRRL/sample-controller-rabbit/pkg/generated/clientset/versioned/typed/rabbit/v1alpha1"
+	fakestrrlv1alpha1 "github.com/STRRL/sample-controller-rabbit/pkg/generated/clientset/versioned/typed/rabbit/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -76,7 +76,7 @@ func (c *Clientset) Tracker() testing.ObjectTracker {
 
 var _ clientset.Interface = &Clientset{}
 
-// RabbitV1alpha1 retrieves the RabbitV1alpha1Client
-func (c *Clientset) RabbitV1alpha1() rabbitv1alpha1.RabbitV1alpha1Interface {
-	return &fakerabbitv1alpha1.FakeRabbitV1alpha1{Fake: &c.Fake}
+// StrrlV1alpha1 retrieves the StrrlV1alpha1Client
+func (c *Clientset) StrrlV1alpha1() strrlv1alpha1.StrrlV1alpha1Interface {
+	return &fakestrrlv1alpha1.FakeStrrlV1alpha1{Fake: &c.Fake}
 }

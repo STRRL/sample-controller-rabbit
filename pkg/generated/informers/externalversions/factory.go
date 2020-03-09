@@ -172,9 +172,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Rabbit() rabbit.Interface
+	Strrl() rabbit.Interface
 }
 
-func (f *sharedInformerFactory) Rabbit() rabbit.Interface {
+func (f *sharedInformerFactory) Strrl() rabbit.Interface {
 	return rabbit.New(f, f.namespace, f.tweakListOptions)
 }

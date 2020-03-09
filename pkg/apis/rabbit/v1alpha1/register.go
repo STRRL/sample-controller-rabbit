@@ -11,7 +11,7 @@ var SchemeGroupVersion = schema.GroupVersion{Group: rabbit.GroupName, Version: r
 
 // addKnownTypes adds our types to the API scheme by registering
 // Network and NetworkList
-func addKnownTypes(scheme *runtime.Scheme) error {
+func AddToScheme(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(
 		SchemeGroupVersion,
 		&Rabbit{},

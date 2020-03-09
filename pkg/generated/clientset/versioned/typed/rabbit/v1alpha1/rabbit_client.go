@@ -24,22 +24,22 @@ import (
 	rest "k8s.io/client-go/rest"
 )
 
-type RabbitV1alpha1Interface interface {
+type StrrlV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	RabbitsGetter
 }
 
-// RabbitV1alpha1Client is used to interact with features provided by the rabbit.strrl.com group.
-type RabbitV1alpha1Client struct {
+// StrrlV1alpha1Client is used to interact with features provided by the strrl.com group.
+type StrrlV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *RabbitV1alpha1Client) Rabbits(namespace string) RabbitInterface {
+func (c *StrrlV1alpha1Client) Rabbits(namespace string) RabbitInterface {
 	return newRabbits(c, namespace)
 }
 
-// NewForConfig creates a new RabbitV1alpha1Client for the given config.
-func NewForConfig(c *rest.Config) (*RabbitV1alpha1Client, error) {
+// NewForConfig creates a new StrrlV1alpha1Client for the given config.
+func NewForConfig(c *rest.Config) (*StrrlV1alpha1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -48,12 +48,12 @@ func NewForConfig(c *rest.Config) (*RabbitV1alpha1Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &RabbitV1alpha1Client{client}, nil
+	return &StrrlV1alpha1Client{client}, nil
 }
 
-// NewForConfigOrDie creates a new RabbitV1alpha1Client for the given config and
+// NewForConfigOrDie creates a new StrrlV1alpha1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *RabbitV1alpha1Client {
+func NewForConfigOrDie(c *rest.Config) *StrrlV1alpha1Client {
 	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
@@ -61,9 +61,9 @@ func NewForConfigOrDie(c *rest.Config) *RabbitV1alpha1Client {
 	return client
 }
 
-// New creates a new RabbitV1alpha1Client for the given RESTClient.
-func New(c rest.Interface) *RabbitV1alpha1Client {
-	return &RabbitV1alpha1Client{c}
+// New creates a new StrrlV1alpha1Client for the given RESTClient.
+func New(c rest.Interface) *StrrlV1alpha1Client {
+	return &StrrlV1alpha1Client{c}
 }
 
 func setConfigDefaults(config *rest.Config) error {
@@ -81,7 +81,7 @@ func setConfigDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *RabbitV1alpha1Client) RESTClient() rest.Interface {
+func (c *StrrlV1alpha1Client) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}
